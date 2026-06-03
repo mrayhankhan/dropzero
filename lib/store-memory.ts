@@ -135,6 +135,49 @@ export function createMemoryStore(): Store {
         .slice(0, limit);
     },
 
+    async stats(dropId) {
+      const s = state();
+      const base = s.drops.get(dropId);
+      if (!base) return null;
+      const orders = s.orders.filter((o) => o.drop_id === dropId);
+      const unitsSold = orders.reduce((n, o) => n + o.qty, 0);
+      const revenueCents = orders.reduce((n, o) => n + o.amount_cents, 0);
+      const times = orders.map((o) => new Date(o.created_at).getTime()).sort((a, b) => a - b);
+      const first = times[0] ?? null;
+      const last = times[times.length - 1] ?? null;
+      const spanMin = first && last ? Math.max(0.001, (last - first) / 60000) : 0;
+      const soldOut = base.status === "sold_out" || unitsSold >= base.total;
+      return {
+        total: base.total,
+        unitsSold,
+        orders: orders.length,
+        sellThroughPct: base.total > 0 ? Math.round((unitsSold / base.total) * 1000) / 10 : 0,
+        revenueCents,
+        velocityPerMin: spanMin > 0 ? Math.round((unitsSold / spanMin) * 10) / 10 : 0,
+        firstSaleAt: first ? new Date(first).toISOString() : null,
+        lastSaleAt: last ? new Date(last).toISOString() : null,
+        timeToSelloutSec: soldOut && first && last ? Math.round((last - first) / 1000) : null,
+      };
+    },
+
+    async integrity(dropId) {
+      const s = state();
+      const base = s.drops.get(dropId);
+      if (!base) return null;
+      const units = s.units.get(dropId) ?? [];
+      const claimedUnits = units.filter((u) => u.status === "claimed").length;
+      const orderUnitSum = s.orders
+        .filter((o) => o.drop_id === dropId)
+        .reduce((n, o) => n + o.qty, 0);
+      return {
+        total: base.total,
+        claimedUnits,
+        orderUnitSum,
+        oversold: Math.max(0, claimedUnits - base.total),
+        ok: claimedUnits === orderUnitSum && claimedUnits <= base.total,
+      };
+    },
+
     async reserve(input: ReserveInput): Promise<ReserveResult> {
       if (!Number.isInteger(input.qty) || input.qty <= 0) {
         throw new ReserveError("invalid_qty");

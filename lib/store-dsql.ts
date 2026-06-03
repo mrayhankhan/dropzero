@@ -195,6 +195,59 @@ export function createDsqlStore(): Store {
       return rows.map(mapOrder);
     },
 
+    async stats(dropId) {
+      const d = await pool().query(`SELECT total, status FROM drops WHERE id = $1`, [dropId]);
+      if (!d.rows[0]) return null;
+      const total = Number(d.rows[0].total);
+      const agg = await pool().query(
+        `SELECT coalesce(sum(qty),0)::int AS units, count(*)::int AS orders,
+                coalesce(sum(amount_cents),0)::bigint AS revenue,
+                min(created_at) AS first, max(created_at) AS last
+           FROM orders WHERE drop_id = $1`,
+        [dropId],
+      );
+      const a = agg.rows[0];
+      const unitsSold = Number(a.units);
+      const first = a.first ? new Date(a.first) : null;
+      const last = a.last ? new Date(a.last) : null;
+      const spanMin = first && last ? Math.max(0.001, (last.getTime() - first.getTime()) / 60000) : 0;
+      const soldOut = d.rows[0].status === "sold_out" || unitsSold >= total;
+      return {
+        total,
+        unitsSold,
+        orders: Number(a.orders),
+        sellThroughPct: total > 0 ? Math.round((unitsSold / total) * 1000) / 10 : 0,
+        revenueCents: Number(a.revenue),
+        velocityPerMin: spanMin > 0 ? Math.round((unitsSold / spanMin) * 10) / 10 : 0,
+        firstSaleAt: first ? first.toISOString() : null,
+        lastSaleAt: last ? last.toISOString() : null,
+        timeToSelloutSec: soldOut && first && last ? Math.round((last.getTime() - first.getTime()) / 1000) : null,
+      };
+    },
+
+    async integrity(dropId) {
+      const d = await pool().query(`SELECT total FROM drops WHERE id = $1`, [dropId]);
+      if (!d.rows[0]) return null;
+      const total = Number(d.rows[0].total);
+      const c = await pool().query(
+        `SELECT count(*)::int AS c FROM drop_units WHERE drop_id = $1 AND status = 'claimed'`,
+        [dropId],
+      );
+      const o = await pool().query(
+        `SELECT coalesce(sum(qty),0)::int AS s FROM orders WHERE drop_id = $1`,
+        [dropId],
+      );
+      const claimedUnits = Number(c.rows[0].c);
+      const orderUnitSum = Number(o.rows[0].s);
+      return {
+        total,
+        claimedUnits,
+        orderUnitSum,
+        oversold: Math.max(0, claimedUnits - total),
+        ok: claimedUnits === orderUnitSum && claimedUnits <= total,
+      };
+    },
+
     /**
      * Claims `qty` distinct random units in one strongly-consistent transaction:
      *   1. Idempotency — replay the same key => same order, never a double-buy.

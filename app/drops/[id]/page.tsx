@@ -7,6 +7,7 @@ import { money, pct } from "@/lib/format";
 import { BuyPanel } from "@/components/BuyPanel";
 import { SimulationPanel } from "@/components/SimulationPanel";
 import { ActivityFeed } from "@/components/ActivityFeed";
+import { DropStats } from "@/components/DropStats";
 import type { Drop } from "@/lib/types";
 
 export default function DropPage({ params }: { params: { id: string } }) {
@@ -61,6 +62,7 @@ export default function DropPage({ params }: { params: { id: string } }) {
             </div>
           </div>
 
+          <DropStats dropId={drop.id} />
           <SimulationPanel dropId={drop.id} />
         </div>
 

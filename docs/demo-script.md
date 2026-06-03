@@ -24,18 +24,26 @@
 > unit is its own row in the database, and each buyer atomically claims a different
 > one."
 
-### 0:55–1:35 — The proof (the centerpiece)
-*[Set buyers to 1000, click **Run stampede**]*
+### 0:55–1:40 — The proof (the centerpiece: the Consistency Console)
+*[Set buyers to 2000, click **Run stampede**]*
 
-> "Let's simulate it: a thousand buyers hitting fifty units simultaneously."
+> "Let's prove it. Two thousand buyers, from five AWS regions, hitting this drop at
+> once."
 
-*[Results render]*
+*[Console renders]*
 
-> "Fifty confirmed. Nine-fifty safely rejected. **Zero oversold.** And look at this
-> number — **zero OCC conflicts retried.** That's the whole trick: because each
-> buyer targets a *random distinct* row, Aurora DSQL's strong consistency holds
-> with almost no contention. Overselling here isn't prevented by luck — it's
-> impossible by design."
+> "**Zero oversold. Integrity: verified** — that's a live check confirming claimed
+> units exactly equal what orders account for. Several thousand transactions per
+> second, p99 latency in the low tens of milliseconds, and an **OCC retry rate near
+> zero** — because each buyer claims a *random distinct* row, so Aurora DSQL's
+> strong consistency holds with almost no contention. And look at the region
+> breakdown — buyers in us-east-1, eu-west-1, ap-northeast-1 all hitting **one
+> consistent inventory**. Overselling here isn't prevented by luck. It's impossible
+> by design."
+
+*[Briefly show the Seller Analytics strip: revenue, 100% sell-through, time-to-sellout]*
+
+> "And it's a real product — live revenue, sell-through, and velocity for the seller."
 
 ### 1:35–2:10 — Why Aurora DSQL specifically
 *[Screen: ARCHITECTURE.md diagram]*

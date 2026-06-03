@@ -60,6 +60,82 @@ export default function Home() {
           </p>
         )}
       </section>
+
+      <section className="border-t-2 border-line py-12">
+        <h2 className="label mb-6 text-ink">How it works</h2>
+        <div className="grid gap-5 sm:grid-cols-3">
+          {[
+            {
+              n: "01",
+              t: "Model inventory as rows",
+              d: "Every unit is its own database row — not a shared counter. A 500-unit drop is 500 claimable rows.",
+            },
+            {
+              n: "02",
+              t: "Claim a random distinct unit",
+              d: "Each buyer atomically claims a different random unit in one strongly-consistent Aurora DSQL transaction.",
+            },
+            {
+              n: "03",
+              t: "Provably never oversell",
+              d: "Each row is claimable once, so the count can't exceed the total — across regions, under any load.",
+            },
+          ].map((s) => (
+            <div key={s.n} className="card">
+              <div className="font-mono text-2xl font-extrabold text-accent">{s.n}</div>
+              <h3 className="mt-2 font-bold">{s.t}</h3>
+              <p className="mt-1.5 text-sm text-muted">{s.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t-2 border-line py-12">
+        <h2 className="label mb-2 text-ink">Why Aurora DSQL</h2>
+        <p className="mb-6 max-w-2xl text-muted">
+          Overselling is a solved problem — but every existing fix trades away global speed,
+          strong consistency, or operational simplicity. Aurora DSQL is the first to give all three.
+        </p>
+        <div className="overflow-x-auto rounded border border-line">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-line bg-card font-mono text-[11px] uppercase tracking-wider text-muted">
+                <th className="px-4 py-2.5 text-left font-medium">Approach</th>
+                <th className="px-4 py-2.5 text-center font-medium">Global speed</th>
+                <th className="px-4 py-2.5 text-center font-medium">Strong consistency</th>
+                <th className="px-4 py-2.5 text-center font-medium">Simple ops</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line/15">
+              {[
+                ["Single-region locked DB", false, true, true],
+                ["Waiting-room queue", null, false, false],
+                ["DynamoDB multi-region", true, false, true],
+                ["Redis atomic counter", true, false, null],
+                ["Aurora DSQL — DropZero", true, true, true],
+              ].map((row, i) => {
+                const last = i === 4;
+                return (
+                  <tr key={i} className={last ? "bg-accent/5 font-semibold" : ""}>
+                    <td className="px-4 py-2.5">{row[0] as string}</td>
+                    {[row[1], row[2], row[3]].map((v, j) => (
+                      <td key={j} className="px-4 py-2.5 text-center font-mono">
+                        {v === true ? (
+                          <span className="text-ok">✓</span>
+                        ) : v === false ? (
+                          <span className="text-danger">✗</span>
+                        ) : (
+                          <span className="text-muted">~</span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }

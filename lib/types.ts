@@ -69,6 +69,29 @@ export class ReserveError extends Error {
   }
 }
 
+export type DropStats = {
+  total: number;
+  unitsSold: number;
+  orders: number;
+  sellThroughPct: number;
+  revenueCents: number;
+  velocityPerMin: number;
+  firstSaleAt: string | null;
+  lastSaleAt: string | null;
+  timeToSelloutSec: number | null;
+};
+
+// A live integrity proof: claimed unit rows must equal the units accounted for by
+// orders, and must never exceed the drop total. ok=true is a mathematical
+// guarantee that nothing was double-claimed or oversold.
+export type Integrity = {
+  total: number;
+  claimedUnits: number;
+  orderUnitSum: number;
+  oversold: number;
+  ok: boolean;
+};
+
 // The Store interface is implemented twice: once against Aurora DSQL (the real,
 // judged path) and once in-memory (so the UI runs with zero credentials).
 export interface Store {
@@ -80,4 +103,6 @@ export interface Store {
   reserve(input: ReserveInput): Promise<ReserveResult>;
   setStatus(id: string, status: DropStatus): Promise<Drop | null>;
   recentOrders(dropId?: string, limit?: number): Promise<Order[]>;
+  stats(dropId: string): Promise<DropStats | null>;
+  integrity(dropId: string): Promise<Integrity | null>;
 }

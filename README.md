@@ -10,6 +10,20 @@ oversell a single unit, even when thousands of people buy in the same instant.
 
 ---
 
+## Highlights
+- **Discrete-unit claim engine** — contention-aware design that makes overselling
+  mathematically impossible on Aurora DSQL's optimistic concurrency model.
+- **Live Consistency Console** — fire thousands of concurrent buyers from 5 regions
+  and watch real observability: throughput, p50/p95/p99 latency, OCC retry rate,
+  per-region distribution, and a one-click **integrity proof**.
+- **Seller analytics** — revenue, sell-through, velocity, time-to-sellout, live.
+- **Zero-credential preview mode** — runs instantly; flips to real Aurora DSQL when
+  you add a cluster endpoint.
+- **Keyless auth** — Vercel OIDC + IAM tokens, no stored passwords.
+- **Optional Stripe test-mode** checkout (authorize → claim → capture).
+
+---
+
 ## The problem
 
 When a hyped drop goes on sale, thousands of buyers hit "Buy" in the same

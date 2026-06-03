@@ -14,12 +14,19 @@ type SimResult = {
   remaining: number;
   oversold: number;
   conflicts: number;
+  retryRatePct: number;
+  throughputPerSec: number;
+  latencyP50: number;
+  latencyP95: number;
+  latencyP99: number;
+  regions: { code: string; confirmed: number }[];
+  integrityOk: boolean;
   durationMs: number;
 };
 
 export function SimulationPanel({ dropId }: { dropId: string }) {
   const { mutate } = useSWRConfig();
-  const [buyers, setBuyers] = useState(1000);
+  const [buyers, setBuyers] = useState(2000);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<SimResult | null>(null);
 
@@ -34,27 +41,35 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
     const data = await res.json();
     if (res.ok) setResult(data);
     mutate(`/api/drops/${dropId}`);
+    mutate(`/api/drops/${dropId}/stats`);
     mutate(`/api/feed?dropId=${dropId}`);
     mutate("/api/drops");
     setBusy(false);
   }
 
+  const maxRegion = result ? Math.max(1, ...result.regions.map((r) => r.confirmed)) : 1;
+
   return (
     <div className="terminal p-5">
-      <div className="flex items-center gap-2">
-        <span className="grid h-6 w-6 place-items-center rounded-sm bg-accent font-mono text-xs font-bold text-paper">
-          ⚡
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="grid h-6 w-6 place-items-center rounded-sm bg-accent font-mono text-xs font-bold text-paper">
+            ⚡
+          </span>
+          <h3 className="font-bold uppercase tracking-tight">Consistency console</h3>
+        </div>
+        <span className="font-mono text-[10px] uppercase tracking-wider text-paper/40">
+          live load test
         </span>
-        <h3 className="font-bold uppercase tracking-tight">Sellout simulation</h3>
       </div>
       <p className="mt-2 text-sm text-paper/70">
-        Fire thousands of purchases <em>concurrently</em> at this drop.{" "}
-        <span className="text-paper">Oversold is always 0</span>, and because each buyer
-        claims a <em>random distinct</em> unit, OCC conflicts stay near zero too.
+        Fire thousands of purchases <em>concurrently</em>, from many regions, at this drop.
+        Watch <span className="text-paper">oversold stay 0</span>, conflicts stay near zero, and
+        the integrity check pass — the live proof of strong consistency under load.
       </p>
 
       <div className="mt-4 flex items-end gap-3">
-        <div className="w-40">
+        <div className="w-44">
           <label className="label text-paper/60">Concurrent buyers</label>
           <input
             type="number"
@@ -67,7 +82,7 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
           />
         </div>
         <button
-          className="rounded border-2 border-paper bg-paper px-4 py-2.5 font-semibold text-ink transition-all duration-100 hover:bg-accent hover:border-accent hover:text-paper disabled:opacity-40"
+          className="rounded border-2 border-paper bg-paper px-4 py-2.5 font-semibold text-ink transition-all duration-100 hover:border-accent hover:bg-accent hover:text-paper disabled:opacity-40"
           onClick={run}
           disabled={busy}
         >
@@ -76,56 +91,83 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
       </div>
 
       {result && (
-        <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded border border-paper/20 bg-paper/20 sm:grid-cols-4">
-          <Stat label="Requested" value={result.unitsRequested.toLocaleString()} />
-          <Stat label="Confirmed" value={result.confirmed.toLocaleString()} tone="ok" />
-          <Stat label="Rejected" value={result.soldOut.toLocaleString()} />
-          <Stat
-            label="Oversold"
-            value={String(result.oversold)}
-            tone={result.oversold === 0 ? "ok" : "bad"}
-            big
-          />
-          <Stat label="Units sold" value={`${result.unitsSold} / ${result.total}`} />
-          <Stat label="Remaining" value={result.remaining.toLocaleString()} />
-          <Stat
-            label="OCC conflicts"
-            value={result.conflicts.toLocaleString()}
-            tone={result.conflicts <= result.buyers * 0.1 ? "ok" : undefined}
-          />
-          <Stat label="Duration" value={`${result.durationMs}ms`} />
-        </div>
-      )}
-      {result && result.oversold === 0 && (
-        <p className="mt-4 rounded-sm border-l-2 border-ok bg-ok/15 px-3 py-2 text-sm text-paper">
-          ✓ {result.confirmed.toLocaleString()} settled · {result.soldOut.toLocaleString()} safely
-          rejected · <strong>0 oversold</strong> — with {result.conflicts.toLocaleString()} OCC
-          conflict{result.conflicts === 1 ? "" : "s"} retried across{" "}
-          {result.buyers.toLocaleString()} concurrent buyers.
-        </p>
+        <>
+          {/* hero metrics */}
+          <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded border border-paper/20 bg-paper/20 sm:grid-cols-4">
+            <Hero label="Oversold" value={String(result.oversold)} tone={result.oversold === 0 ? "ok" : "bad"} />
+            <Hero
+              label="Integrity"
+              value={result.integrityOk ? "✓ verified" : "✗ failed"}
+              tone={result.integrityOk ? "ok" : "bad"}
+            />
+            <Hero label="Throughput" value={`${result.throughputPerSec.toLocaleString()}/s`} />
+            <Hero label="OCC retry rate" value={`${result.retryRatePct}%`} tone={result.retryRatePct < 5 ? "ok" : undefined} />
+          </div>
+
+          {/* detail grid */}
+          <div className="mt-px grid grid-cols-2 gap-px overflow-hidden rounded border border-paper/20 bg-paper/20 sm:grid-cols-4">
+            <Stat label="Requested" value={result.unitsRequested.toLocaleString()} />
+            <Stat label="Confirmed" value={result.confirmed.toLocaleString()} />
+            <Stat label="Rejected" value={result.soldOut.toLocaleString()} />
+            <Stat label="Units sold" value={`${result.unitsSold}/${result.total}`} />
+            <Stat label="Latency p50" value={`${result.latencyP50}ms`} />
+            <Stat label="Latency p95" value={`${result.latencyP95}ms`} />
+            <Stat label="Latency p99" value={`${result.latencyP99}ms`} />
+            <Stat label="Wall time" value={`${result.durationMs}ms`} />
+          </div>
+
+          {/* region distribution */}
+          {result.regions.length > 0 && (
+            <div className="mt-4">
+              <div className="label mb-2 text-paper/60">Confirmed sales by region · one consistent inventory</div>
+              <div className="space-y-1.5">
+                {result.regions.map((r) => (
+                  <div key={r.code} className="flex items-center gap-2">
+                    <span className="w-28 shrink-0 font-mono text-xs text-paper/70">{r.code}</span>
+                    <div className="h-3 flex-1 overflow-hidden rounded-sm bg-paper/10">
+                      <span
+                        className="block h-full bg-accent"
+                        style={{ width: `${(r.confirmed / maxRegion) * 100}%` }}
+                      />
+                    </div>
+                    <span className="num w-10 shrink-0 text-right font-mono text-xs text-paper">
+                      {r.confirmed}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {result.oversold === 0 && result.integrityOk && (
+            <p className="mt-4 rounded-sm border-l-2 border-ok bg-ok/15 px-3 py-2 text-sm text-paper">
+              ✓ {result.confirmed.toLocaleString()} settled · {result.soldOut.toLocaleString()} safely
+              rejected · <strong>0 oversold</strong> · integrity verified · {result.conflicts.toLocaleString()}{" "}
+              conflict{result.conflicts === 1 ? "" : "s"} retried across {result.buyers.toLocaleString()}{" "}
+              buyers in {result.regions.length} regions.
+            </p>
+          )}
+        </>
       )}
     </div>
   );
 }
 
-function Stat({
-  label,
-  value,
-  tone,
-  big,
-}: {
-  label: string;
-  value: string;
-  tone?: "ok" | "bad";
-  big?: boolean;
-}) {
+function Hero({ label, value, tone }: { label: string; value: string; tone?: "ok" | "bad" }) {
   const color = tone === "ok" ? "text-ok" : tone === "bad" ? "text-danger" : "text-paper";
+  return (
+    <div className="bg-ink px-3 py-3">
+      <div className="font-mono text-[10px] uppercase tracking-wider text-paper/50">{label}</div>
+      <div className={`num mt-1 font-mono text-2xl font-semibold ${color}`}>{value}</div>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-ink px-3 py-2.5">
       <div className="font-mono text-[10px] uppercase tracking-wider text-paper/50">{label}</div>
-      <div className={`num mt-1 font-mono font-semibold ${big ? "text-3xl" : "text-lg"} ${color}`}>
-        {value}
-      </div>
+      <div className="num mt-1 font-mono text-base font-semibold text-paper">{value}</div>
     </div>
   );
 }

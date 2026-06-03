@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "DropZero — zero oversells at global scale",
@@ -17,7 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans antialiased">
         <Header />
-        <main className="mx-auto max-w-6xl px-4 pb-24 pt-6">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 pb-16 pt-6">{children}</main>
+        <Footer />
       </body>
     </html>
   );
