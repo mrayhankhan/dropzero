@@ -92,7 +92,33 @@ function seedDemo(s: MemState) {
       status: "live",
     },
   ];
-  for (const input of samples) makeDrop(s, input);
+  const created = samples.map((input) => makeDrop(s, input));
+
+  // Seed recent activity so the live tape + feed are populated in preview mode.
+  const regions = ["us-east-1", "eu-west-1", "ap-northeast-1", "us-west-2", "ap-south-1"];
+  const perDrop = [16, 24, 7];
+  created.forEach((drop, di) => {
+    const units = s.units.get(drop.id) ?? [];
+    const n = Math.min(perDrop[di] ?? 8, units.length);
+    for (let i = 0; i < n; i++) {
+      const u = units[i];
+      if (u.status !== "available") continue;
+      const orderId = randomUUID();
+      u.status = "claimed";
+      u.order_id = orderId;
+      s.orders.push({
+        id: orderId,
+        drop_id: drop.id,
+        buyer_email: `fan${Math.floor(1000 + Math.random() * 9000)}@dropzero.dev`,
+        qty: 1,
+        amount_cents: drop.price_cents,
+        idempotency_key: orderId,
+        region: regions[Math.floor(Math.random() * regions.length)],
+        status: "confirmed",
+        created_at: new Date(Date.now() - Math.floor(Math.random() * 600) * 1000).toISOString(),
+      });
+    }
+  });
 }
 
 export function createMemoryStore(): Store {

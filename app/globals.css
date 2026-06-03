@@ -126,6 +126,59 @@ body {
   animation: livePulse 1.8s ease-in-out infinite;
 }
 
+/* hero entrance — staggered reveal on load */
+@keyframes enterUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.enter {
+  animation: enterUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* highlighter wipe on the headline accent */
+@keyframes wipeIn {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.wipe-in {
+  animation: wipeIn 0.7s 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* continuous live tape */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 34s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .wipe-in,
+  .marquee-track,
+  .live-dot {
+    animation: none;
+  }
+}
+
 /* ticket-stub perforation divider */
 .perf {
   height: 1px;

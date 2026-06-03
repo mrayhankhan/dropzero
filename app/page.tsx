@@ -1,8 +1,11 @@
 "use client";
 
+import { type ReactNode } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import { DropCard } from "@/components/DropCard";
+import { LiveTicker } from "@/components/LiveTicker";
+import { CountUp } from "@/components/CountUp";
 import type { Drop } from "@/lib/types";
 
 type DropsResponse = { backend: string; region: string; drops: Drop[] };
@@ -16,8 +19,12 @@ export default function Home() {
 
   return (
     <div>
+      <div className="-mx-4">
+        <LiveTicker />
+      </div>
+
       <section className="border-b-2 border-line py-12 sm:py-16">
-        <div className="mb-5 flex flex-wrap items-center gap-2">
+        <div className="enter mb-5 flex flex-wrap items-center gap-2">
           <span className="tag bg-ink text-paper">
             <span className={`live-dot h-1.5 w-1.5 rounded-full ${onDsql ? "bg-ok" : "bg-accent"}`} />
             {data ? (onDsql ? `Aurora DSQL · ${data.region}` : "Preview · in-memory") : "…"}
@@ -26,20 +33,30 @@ export default function Home() {
           <span className="tag">Multi-region active-active</span>
         </div>
 
-        <h1 className="max-w-3xl text-5xl font-extrabold leading-[0.98] tracking-tight sm:text-6xl">
+        <h1 className="enter max-w-3xl text-5xl font-extrabold leading-[0.98] tracking-tight [animation-delay:80ms] sm:text-6xl">
           Sell every unit.
           <br />
-          <span className="box-decoration-clone bg-accent px-2 text-paper">
+          <span className="wipe-in box-decoration-clone bg-accent px-2 text-paper">
             Oversell nothing.
           </span>
         </h1>
-        <p className="mt-6 max-w-2xl text-lg text-muted">
+        <p className="enter mt-6 max-w-2xl text-lg text-muted [animation-delay:160ms]">
           DropZero runs limited drops for a worldwide audience. Every purchase atomically
           claims a distinct unit on{" "}
           <span className="font-semibold text-ink">Amazon Aurora DSQL</span> — so inventory
           can never go below zero, even with thousands buying in the same instant across
           regions. Pick a drop and try to break it.
         </p>
+
+        <div className="enter mt-8 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded border border-line bg-line/10 [animation-delay:240ms] sm:grid-cols-4">
+          <HeroStat value="0" label="Oversells, ever" />
+          <HeroStat value={<><CountUp value={100} />%</>} label="Inventory integrity" />
+          <HeroStat value={<CountUp value={5} />} label="AWS regions" />
+          <HeroStat
+            value={<CountUp value={12000} format={(n) => `${(n / 1000).toFixed(1)}k`} />}
+            label="Txns/sec (sim)"
+          />
+        </div>
       </section>
 
       <section className="py-10">
@@ -136,6 +153,17 @@ export default function Home() {
           </table>
         </div>
       </section>
+    </div>
+  );
+}
+
+function HeroStat({ value, label }: { value: ReactNode; label: string }) {
+  return (
+    <div className="bg-card px-4 py-3">
+      <div className="num font-mono text-2xl font-extrabold text-ink">{value}</div>
+      <div className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-muted">
+        {label}
+      </div>
     </div>
   );
 }
