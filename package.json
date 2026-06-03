@@ -14,18 +14,23 @@
   },
   "dependencies": {
     "@aws-sdk/dsql-signer": "^3.726.0",
+    "d3-geo": "^3.1.1",
     "next": "^14.2.35",
     "pg": "^8.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "stripe": "^22.2.0",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
+    "@types/d3-geo": "^3.1.0",
     "@types/node": "^20.17.10",
     "@types/pg": "^8.11.10",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/topojson-client": "^3.1.5",
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.7",
     "postcss": "^8.4.49",

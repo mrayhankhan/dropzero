@@ -5,7 +5,6 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import { DropCard } from "@/components/DropCard";
 import { LiveTicker } from "@/components/LiveTicker";
-import { RegionMap } from "@/components/RegionMap";
 import { CountUp } from "@/components/CountUp";
 import type { Drop } from "@/lib/types";
 
@@ -57,10 +56,6 @@ export default function Home() {
             value={<CountUp value={12000} format={(n) => `${(n / 1000).toFixed(1)}k`} />}
             label="Txns/sec (sim)"
           />
-        </div>
-
-        <div className="enter mt-8 [animation-delay:320ms]">
-          <RegionMap />
         </div>
       </section>
 
