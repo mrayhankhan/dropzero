@@ -51,7 +51,7 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
   const maxRegion = result ? Math.max(1, ...result.regions.map((r) => r.confirmed)) : 1;
 
   return (
-    <div className="terminal p-5">
+    <div className="terminal ambient-grid p-5">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="grid h-6 w-6 place-items-center rounded-sm bg-accent font-mono text-xs font-bold text-paper">

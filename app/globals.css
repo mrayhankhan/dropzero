@@ -170,11 +170,71 @@ body {
 .marquee-track:hover {
   animation-play-state: paused;
 }
+
+/* ambient drifting grid for dark "terminal" surfaces */
+@keyframes ambientDrift {
+  to {
+    background-position: 30px 30px, 30px 30px;
+  }
+}
+.ambient-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: ambientDrift 16s linear infinite;
+}
+
+/* region map — idle node pulse, arc data-flow, purchase ping */
+@keyframes nodePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.map-node-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nodePulse 2.6s ease-in-out infinite;
+}
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+.map-arc {
+  animation: dashFlow 7s linear infinite;
+}
+@keyframes mapPing {
+  from {
+    transform: scale(0.5);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+.map-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mapPing 1.3s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .enter,
   .wipe-in,
   .marquee-track,
-  .live-dot {
+  .live-dot,
+  .ambient-grid,
+  .map-node-ring,
+  .map-arc,
+  .map-ping {
     animation: none;
   }
 }

@@ -21,7 +21,7 @@ export function LiveTicker() {
   const items = [...orders, ...orders];
 
   return (
-    <div className="relative overflow-hidden border-y-2 border-line bg-ink">
+    <div className="ambient-grid relative overflow-hidden border-y-2 border-line bg-ink">
       <div className="marquee-track flex w-max gap-8 py-2.5">
         {items.map((o, i) => (
           <span
