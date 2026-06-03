@@ -20,7 +20,7 @@ export function DropCard({ drop }: { drop: Drop }) {
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-[17px] font-bold leading-tight">{drop.name}</h3>
         <span className={`tag ${STATUS_STYLE[drop.status] ?? ""}`}>
-          {drop.status === "live" && <span className="h-1.5 w-1.5 rounded-full bg-ok" />}
+          {drop.status === "live" && <span className="live-dot h-1.5 w-1.5 rounded-full bg-ok" />}
           {drop.status.replace("_", " ")}
         </span>
       </div>

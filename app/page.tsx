@@ -19,7 +19,7 @@ export default function Home() {
       <section className="border-b-2 border-line py-12 sm:py-16">
         <div className="mb-5 flex flex-wrap items-center gap-2">
           <span className="tag bg-ink text-paper">
-            <span className={`h-1.5 w-1.5 rounded-full ${onDsql ? "bg-ok" : "bg-accent"}`} />
+            <span className={`live-dot h-1.5 w-1.5 rounded-full ${onDsql ? "bg-ok" : "bg-accent"}`} />
             {data ? (onDsql ? `Aurora DSQL · ${data.region}` : "Preview · in-memory") : "…"}
           </span>
           <span className="tag">Strongly consistent</span>

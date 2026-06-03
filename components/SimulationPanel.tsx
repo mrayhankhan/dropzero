@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useSWRConfig } from "swr";
+import { CountUp } from "./CountUp";
 
 type SimResult = {
   backend: string;
@@ -94,21 +95,28 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
         <>
           {/* hero metrics */}
           <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded border border-paper/20 bg-paper/20 sm:grid-cols-4">
-            <Hero label="Oversold" value={String(result.oversold)} tone={result.oversold === 0 ? "ok" : "bad"} />
+            <Hero label="Oversold" value={<CountUp value={result.oversold} />} tone={result.oversold === 0 ? "ok" : "bad"} />
             <Hero
               label="Integrity"
               value={result.integrityOk ? "✓ verified" : "✗ failed"}
               tone={result.integrityOk ? "ok" : "bad"}
             />
-            <Hero label="Throughput" value={`${result.throughputPerSec.toLocaleString()}/s`} />
-            <Hero label="OCC retry rate" value={`${result.retryRatePct}%`} tone={result.retryRatePct < 5 ? "ok" : undefined} />
+            <Hero
+              label="Throughput"
+              value={<CountUp value={result.throughputPerSec} format={(n) => `${n.toLocaleString()}/s`} />}
+            />
+            <Hero
+              label="OCC retry rate"
+              value={<CountUp value={result.retryRatePct} format={(n) => `${n}%`} />}
+              tone={result.retryRatePct < 5 ? "ok" : undefined}
+            />
           </div>
 
           {/* detail grid */}
           <div className="mt-px grid grid-cols-2 gap-px overflow-hidden rounded border border-paper/20 bg-paper/20 sm:grid-cols-4">
-            <Stat label="Requested" value={result.unitsRequested.toLocaleString()} />
-            <Stat label="Confirmed" value={result.confirmed.toLocaleString()} />
-            <Stat label="Rejected" value={result.soldOut.toLocaleString()} />
+            <Stat label="Requested" value={<CountUp value={result.unitsRequested} />} />
+            <Stat label="Confirmed" value={<CountUp value={result.confirmed} />} />
+            <Stat label="Rejected" value={<CountUp value={result.soldOut} />} />
             <Stat label="Units sold" value={`${result.unitsSold}/${result.total}`} />
             <Stat label="Latency p50" value={`${result.latencyP50}ms`} />
             <Stat label="Latency p95" value={`${result.latencyP95}ms`} />
@@ -126,7 +134,7 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
                     <span className="w-28 shrink-0 font-mono text-xs text-paper/70">{r.code}</span>
                     <div className="h-3 flex-1 overflow-hidden rounded-sm bg-paper/10">
                       <span
-                        className="block h-full bg-accent"
+                        className="block h-full bg-accent transition-[width] duration-700 ease-out"
                         style={{ width: `${(r.confirmed / maxRegion) * 100}%` }}
                       />
                     </div>
@@ -153,7 +161,7 @@ export function SimulationPanel({ dropId }: { dropId: string }) {
   );
 }
 
-function Hero({ label, value, tone }: { label: string; value: string; tone?: "ok" | "bad" }) {
+function Hero({ label, value, tone }: { label: string; value: ReactNode; tone?: "ok" | "bad" }) {
   const color = tone === "ok" ? "text-ok" : tone === "bad" ? "text-danger" : "text-paper";
   return (
     <div className="bg-ink px-3 py-3">
@@ -163,7 +171,7 @@ function Hero({ label, value, tone }: { label: string; value: string; tone?: "ok
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="bg-ink px-3 py-2.5">
       <div className="font-mono text-[10px] uppercase tracking-wider text-paper/50">{label}</div>

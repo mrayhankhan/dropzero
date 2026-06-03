@@ -23,7 +23,7 @@ export function ActivityFeed({ dropId }: { dropId?: string }) {
         {orders.map((o) => (
           <li
             key={o.id}
-            className="flex items-center justify-between border-b border-line/15 py-2 text-sm last:border-0"
+            className="row-in flex items-center justify-between border-b border-line/15 py-2 text-sm last:border-0"
           >
             <span className="num font-mono text-ink">{maskEmail(o.buyer_email)}</span>
             <span className="flex items-center gap-2.5">
