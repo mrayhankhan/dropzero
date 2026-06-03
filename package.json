@@ -1,0 +1,39 @@
+{
+  "name": "dropzero",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Oversell-proof global live-drops on Aurora DSQL + Vercel. H0 hackathon.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:init": "tsx db/init.ts",
+    "db:seed": "tsx db/seed.ts",
+    "db:reset": "tsx db/init.ts --drop && tsx db/seed.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/dsql-signer": "^3.726.0",
+    "next": "^14.2.35",
+    "pg": "^8.13.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^22.2.0",
+    "swr": "^2.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.7",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

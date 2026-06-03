@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: #f1eee4;
+  /* faint engineering dot-grid — texture without gradients */
+  background-image: radial-gradient(rgba(22, 20, 16, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: #161410;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded border border-line bg-card p-5;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded border-2 border-line
+           px-4 py-2.5 font-semibold transition-all duration-100
+           disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-paper shadow-hardsm hover:-translate-x-[1px]
+           hover:-translate-y-[1px] hover:shadow-hard active:translate-x-0
+           active:translate-y-0 active:shadow-none;
+  }
+  .btn-ghost {
+    @apply btn bg-card text-ink shadow-hardsm hover:-translate-x-[1px]
+           hover:-translate-y-[1px] hover:shadow-hard active:translate-x-0
+           active:translate-y-0 active:shadow-none;
+  }
+  /* uppercase mono tag, ticket-stub style */
+  .tag {
+    @apply inline-flex items-center gap-1.5 rounded-sm border border-line px-2 py-0.5
+           font-mono text-[11px] font-medium uppercase tracking-wider;
+  }
+  .input {
+    @apply w-full rounded border border-line bg-white px-3 py-2 text-sm text-ink
+           outline-none focus:border-accent focus:ring-2 focus:ring-accent/25;
+  }
+  .label {
+    @apply font-mono text-[11px] uppercase tracking-wider text-muted;
+  }
+  /* inverted "terminal" surface for the proof + activity readouts */
+  .terminal {
+    @apply rounded border-2 border-line bg-ink text-paper;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* segmented scarcity meter */
+.meter {
+  position: relative;
+  height: 12px;
+  border: 1px solid #161410;
+  border-radius: 3px;
+  background: #e7e3d6;
+  overflow: hidden;
+}
+.meter > span {
+  display: block;
+  height: 100%;
+  background-color: #1f3bff;
+  transition: width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* tick marks overlay */
+.meter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 11px,
+    rgba(22, 20, 16, 0.18) 11px,
+    rgba(22, 20, 16, 0.18) 12px
+  );
+  pointer-events: none;
+}
+.meter.danger > span {
+  background-color: #d83a2e;
+}
+
+/* ticket-stub perforation divider */
+.perf {
+  height: 1px;
+  background-image: radial-gradient(circle, #161410 1px, transparent 1.4px);
+  background-size: 10px 2px;
+  background-repeat: repeat-x;
+  opacity: 0.4;
+}
