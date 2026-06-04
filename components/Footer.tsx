@@ -10,8 +10,11 @@ export function Footer() {
             DropZero · zero oversells at global scale
           </span>
         </div>
-        <div className="font-mono text-xs uppercase tracking-wider text-muted">
-          Amazon Aurora DSQL × Vercel · #H0Hackathon
+        <div className="flex items-center gap-4 font-mono text-xs uppercase tracking-wider text-muted">
+          <a href="/architecture" className="underline-offset-2 hover:text-ink hover:underline">
+            Architecture
+          </a>
+          <span>Amazon Aurora DSQL × Vercel · #H0Hackathon</span>
         </div>
       </div>
     </footer>
