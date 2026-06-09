@@ -29,6 +29,21 @@ of concurrent buys and shows the result live: e.g. *1,000 buyers → 200 confirm
 800 rejected, **0 oversold, 0 conflicts.*** There's a seller console, a live global
 activity feed, and per-drop scarcity meters.
 
+## Beyond tickets — the bigger pattern (where this goes)
+Ticketing is just the most photogenic example. The real product is **fair,
+oversell-proof allocation of any scarce resource that thousands of people grab for
+at the same instant** — precisely the systems that crash, freeze, or double-book
+somebody every year:
+- **University course registration** — 10,000 students hitting "enroll" at 8 a.m. for limited seats and lab sections.
+- **Government services** — visa / passport / appointment slots, vaccine and benefit sign-ups, scheme enrollment, exam-center allocation.
+- **Enterprise ERP** — inventory, capacity, and resource allocation across regions.
+- **Anything with a hard cap** — limited drops, reservations, clinic appointments, parking, IPO/share allotment.
+
+DropZero turns that entire class of problem into a few lines of SQL on Aurora DSQL —
+globally, with a *correctness guarantee* instead of a virtual queue and an apology
+email. That's the difference between "functional" and genuinely shippable
+infrastructure for high-contention allocation worldwide.
+
 ## How we built it — and the one decision that matters
 Aurora DSQL gives you global scale **and** strong consistency **and** serverless
 simplicity at once — but only if you respect its **optimistic concurrency control

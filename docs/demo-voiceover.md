@@ -38,15 +38,19 @@ Here's how it's put together. A Next.js front end on Vercel — co-located in St
 
 And it's a real product, not just a stress test. A single purchase confirms instantly and shows up in the live global feed, tagged by region. Sellers see live revenue, sell-through, and how fast a drop is moving. Payments are wired in with Stripe in test mode.
 
-**[2:36 — return to the homepage, "Aurora DSQL · eu-north-1" badge in frame]**
+**[2:28 — stay on the app, or scroll the homepage; this is the "where this goes" moment]**
+
+And honestly, this isn't really about tickets. Anywhere a crowd grabs for limited slots at the same second, this same engine fits — college course registration, when ten thousand students hit "enroll" at eight in the morning; government visa, passport, and appointment booking; vaccine and benefit sign-ups; ERP inventory and resource allocation across an enterprise. Those are exactly the systems that crash, freeze, or double-book somebody every single year. DropZero turns fair, oversell-proof allocation of any scarce resource into a few lines of SQL — globally, with a correctness guarantee instead of a queue and an apology email.
+
+**[2:48 — return to the homepage, "Aurora DSQL · eu-north-1" badge in frame]**
 
 So that's DropZero. The front end runs on Vercel, the data runs on Amazon Aurora DSQL, it's deployed, and it's proven. Zero oversells, zero cold starts, zero ops. Thanks for watching.
 
-**[~2:55 — end]**
+**[~3:05 — end]**
 
 ---
 
 ### If you fluff a line
 Just pause, stop talking, and start that sentence again — you can trim the dead air later, or most people won't even notice. Don't restart the whole take.
 
-### Word count ≈ 450 → ~2:50 at a calm pace. If you run long, the first paragraph to trim is the 0:22 "How it works" one.
+### Word count ≈ 510 → ~3:05 at a calm pace. To stay safely under 3:00, **trim the 0:22 "How it works" paragraph** (drop the "locks, queues, Redis counters" list) or speak a touch brisker. The "where this goes" beat is the one to protect — it's your biggest Impact moment.
