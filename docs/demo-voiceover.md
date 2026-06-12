@@ -1,56 +1,53 @@
-# DropZero — demo voiceover (word-for-word teleprompter, ~2:50)
+# DropZero — demo narration (short & conversational · ~2–2½ min)
 
-## Before you hit record
-- Open **dropzero.vercel.app** in a clean browser window (hide bookmarks bar + extensions).
-- Confirm the homepage badge reads **"Aurora DSQL · eu-north-1."**
-- Make sure the drop you'll demo on shows **full inventory** (e.g. "Zero Stack Hoodie — Founder's Drop" at 500 / 500). If nothing is full, open **/admin** and create a fresh one (total 500, price 6400, status live) right before recording — because running the stampede sells it out.
-- Record the browser only (`Cmd+Shift+5` → record selected window). Keep it **under 3:00**. Speak at a natural pace.
+You're filming yourself on your phone and syncing it over a silent Mac screen
+recording in the editor — so the **clicks/screen stay exactly the same as before**,
+this is just tighter, more natural narration. Each block is tagged with *what's on
+screen* at that moment so you can line it up.
 
----
-
-## Script (just read it — [brackets] are what to do, not what to say)
-
-**[0:00 — homepage; cursor near the "Aurora DSQL · eu-north-1" badge and the moving live tape]**
-
-Hi — this is DropZero. Every time something popular goes on sale — concert tickets, a sneaker drop, a limited product launch — the same thing happens to somebody: you get the confirmation, and then, minutes later, the "sorry, it was actually sold out" email. That's called overselling, and it's everywhere. DropZero makes it impossible — at global scale. It runs on Amazon Aurora DSQL, and everything moving on this page right now is real purchase data, streaming live from the database.
-
-**[0:22 — slowly scroll down past the live drops, the "How it works" cards, and the comparison table]**
-
-A seller launches a limited drop — tickets, merch, anything scarce — and buyers from all over the world rush in at the same moment. The whole trick is in how the inventory is modeled. Instead of one counter that every buyer fights over, every single unit is its own row in Aurora DSQL. Now, overselling is technically a solved problem — locks, queues, Redis counters all work — but every one of them gives up something: global speed, or strong consistency, or simple operations. Aurora DSQL is the first that gives you all three at once.
-
-**[0:48 — scroll back up and click into a live drop showing full inventory, e.g. "Zero Stack Hoodie — Founder's Drop", 500 / 500]**
-
-Let's look at one. This drop has five hundred units, all available. When it goes live, thousands of people can hit "buy" in the same instant. Behind the scenes, each buyer atomically claims a random, distinct unit — in a single, strongly-consistent transaction. No two people can ever get the same one.
-
-**[1:08 — scroll to the Consistency Console; set "Concurrent buyers" to 600; click "Run stampede"]**
-
-So let's actually prove that. I'm going to throw six hundred concurrent buyers at five hundred units — all at once.
-
-**[pause ~1–2 seconds while the numbers render and count up]**
-
-And there it is. Five hundred confirmed. One hundred rejected — cleanly, no errors. Oversold: zero. The integrity check — which re-counts the database to confirm nothing was double-sold — passes: verified. And look at this number: only a handful of concurrency conflicts had to retry, across six hundred simultaneous buyers, because every one of them targeted a different row. This isn't prevented by luck, or by putting people in a queue. On Aurora DSQL, it is impossible by design.
-
-**[1:48 — open dropzero.vercel.app/architecture]**
-
-Here's how it's put together. A Next.js front end on Vercel — co-located in Stockholm, in the same region as the database, so every query is fast. The data layer is the claim engine: it grabs a random free unit, and automatically retries if two buyers ever collide. And the system of record is Amazon Aurora DSQL — serverless, replicated across three availability zones, strongly consistent, and it scales all the way down to zero when nobody's buying.
-
-**[2:12 — back to the app; do one normal single "Buy" on a drop; show it appear in the live activity feed; point at the seller analytics — revenue and sell-through]**
-
-And it's a real product, not just a stress test. A single purchase confirms instantly and shows up in the live global feed, tagged by region. Sellers see live revenue, sell-through, and how fast a drop is moving. Payments are wired in with Stripe in test mode.
-
-**[2:28 — stay on the app, or scroll the homepage; this is the "where this goes" moment]**
-
-And honestly, this isn't really about tickets. Anywhere a crowd grabs for limited slots at the same second, this same engine fits — college course registration, when ten thousand students hit "enroll" at eight in the morning; government visa, passport, and appointment booking; vaccine and benefit sign-ups; ERP inventory and resource allocation across an enterprise. Those are exactly the systems that crash, freeze, or double-book somebody every single year. DropZero turns fair, oversell-proof allocation of any scarce resource into a few lines of SQL — globally, with a correctness guarantee instead of a queue and an apology email.
-
-**[2:48 — return to the homepage, "Aurora DSQL · eu-north-1" badge in frame]**
-
-So that's DropZero. The front end runs on Vercel, the data runs on Amazon Aurora DSQL, it's deployed, and it's proven. Zero oversells, zero cold starts, zero ops. Thanks for watching.
-
-**[~3:05 — end]**
+## On-screen actions (unchanged — your existing screen recording)
+1. Homepage (badge "Aurora DSQL · eu-north-1" + live tape)
+2. Scroll down (drops → how it works → comparison table)
+3. Click into a drop with full inventory (e.g. Hoodie 500/500)
+4. Consistency Console → set 600 buyers → Run stampede
+5. Open /architecture
+6. One normal Buy → live feed + seller analytics
+7. Back to homepage (badge in frame)
 
 ---
 
-### If you fluff a line
-Just pause, stop talking, and start that sentence again — you can trim the dead air later, or most people won't even notice. Don't restart the whole take.
+## Narration (just talk — keep it relaxed but moving)
 
-### Word count ≈ 510 → ~3:05 at a calm pace. To stay safely under 3:00, **trim the 0:22 "How it works" paragraph** (drop the "locks, queues, Redis counters" list) or speak a touch brisker. The "where this goes" beat is the one to protect — it's your biggest Impact moment.
+**[on screen: homepage, badge + live tape]**
+This is DropZero. Big ticket sales always end with someone getting that "sorry — actually sold out" email. That's overselling, and DropZero makes it impossible, worldwide. It runs on Amazon Aurora DSQL, and everything moving here is live data, straight from the database.
+
+**[on screen: scrolling — drops, how it works, comparison table]**
+Sellers drop limited stuff, and everyone buys at the same second. The trick? Instead of one counter everyone fights over, every single unit is its own row in DSQL. Other fixes trade away either speed, consistency, or simplicity — Aurora DSQL gives you all three.
+
+**[on screen: clicking into a drop, 500 / 500]**
+Here's a drop — five hundred units. Each buyer claims a random, distinct one, in a single strongly-consistent transaction. Two people can never get the same unit.
+
+**[on screen: Consistency Console → 600 buyers → Run stampede]**
+So let's prove it — six hundred buyers, five hundred units, all at once.
+*(let the numbers land)*
+Five hundred sold, a hundred rejected, zero oversold. The integrity check passes — and almost no conflicts, even with six hundred at once, because everyone grabbed a different row. It's not luck. It's impossible by design.
+
+**[on screen: /architecture page]**
+Quick look under the hood: Next.js on Vercel, in the same region as the database. The claim engine grabs a unit and retries if there's ever a collision. And Aurora DSQL is the source of truth — serverless, replicated across three zones, strongly consistent, scales to zero.
+
+**[on screen: one normal Buy → live feed + seller analytics]**
+And it's a real product, not just a stress test — a normal buy confirms instantly, pops into the live feed by region, with live seller revenue and sell-through. Payments are wired in too.
+
+**[on screen: stay on the app / homepage — the "where this goes" moment]**
+And honestly, it's not just tickets. Anywhere a crowd grabs for limited slots at once — college course registration, government visa and appointment slots, vaccine sign-ups, ERP inventory — those are the systems that crash or double-book every year. DropZero makes oversell-proof allocation of any scarce resource just a few lines of SQL.
+
+**[on screen: homepage, badge in frame]**
+That's DropZero — front end on Vercel, data on Amazon Aurora DSQL, live and proven. Zero oversells, zero ops. Thanks for watching.
+
+---
+
+## Tips
+- ~300 words → about **2 to 2½ minutes** at a relaxed pace. Keep moving; don't linger between lines.
+- You say **"Amazon Aurora DSQL"** at the start and end, and DSQL throughout — that covers the "name the database out loud" requirement.
+- **Syncing:** match the start of each block to the matching screen moment; the *(let the numbers land)* pause is where you go quiet while the stampede result counts up.
+- If you flub a line, just re-say that one sentence — you'll cut the gap in the editor.
