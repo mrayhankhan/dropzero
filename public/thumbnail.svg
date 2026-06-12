@@ -1,18 +1,5 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>DropZero — Thumbnail</title>
-    <style>
-      * { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; height: 100%; background: #f1eee4; }
-      svg { display: block; width: 100vw; height: 100vh; }
-      .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-      .sans { font-family: "Helvetica Neue", Arial, system-ui, sans-serif; }
-    </style>
-  </head>
-  <body>
-    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}.sans{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}.mono{font-family:Menlo,'SF Mono',monospace}</style>
       <defs>
         <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
           <circle cx="1.4" cy="1.4" r="1.4" fill="rgba(22,20,16,0.06)" />
@@ -66,5 +53,3 @@
       <!-- footer -->
       <text x="600" y="772" text-anchor="middle" class="mono" font-size="14" fill="#5c584c">dropzero.vercel.app · live on Amazon Aurora DSQL + Vercel</text>
     </svg>
-  </body>
-</html>
