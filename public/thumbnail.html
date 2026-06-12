@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>DropZero — Thumbnail</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        background: #2a2a2a;
+      }
+      .frame { width: 1200px; height: 675px; }
+      svg { display: block; width: 100%; height: 100%; }
+      .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+      .sans { font-family: "Helvetica Neue", Arial, system-ui, sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <svg viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="1.4" cy="1.4" r="1.4" fill="rgba(22,20,16,0.06)" />
+          </pattern>
+        </defs>
+
+        <!-- background -->
+        <rect x="0" y="0" width="1200" height="675" fill="#f1eee4" />
+        <rect x="0" y="0" width="1200" height="675" fill="url(#dots)" />
+        <rect x="0" y="0" width="1200" height="675" fill="none" stroke="#161410" stroke-width="3" />
+
+        <!-- header -->
+        <rect x="64" y="56" width="46" height="46" rx="8" fill="#161410" />
+        <text x="87" y="88" text-anchor="middle" class="mono" font-size="24" font-weight="800" fill="#f1eee4">0</text>
+        <text x="124" y="89" class="sans" font-size="26" font-weight="800" fill="#161410" letter-spacing="-0.5">DROPZERO</text>
+
+        <text x="1136" y="76" text-anchor="end" class="mono" font-size="14" fill="#1f3bff" font-weight="700">TRACK 3 · MILLION-SCALE GLOBAL APP</text>
+        <text x="1136" y="98" text-anchor="end" class="mono" font-size="13" fill="#5c584c">AMAZON AURORA DSQL × VERCEL · #H0HACKATHON</text>
+
+        <!-- headline -->
+        <text x="64" y="250" class="sans" font-size="78" font-weight="800" fill="#161410" letter-spacing="-2">Sell every unit.</text>
+        <rect x="60" y="278" width="690" height="84" rx="4" fill="#1f3bff" />
+        <text x="80" y="340" class="sans" font-size="78" font-weight="800" fill="#f1eee4" letter-spacing="-2">Oversell nothing.</text>
+
+        <!-- subtitle -->
+        <text x="64" y="418" class="sans" font-size="25" fill="#5c584c">Oversell-proof global live-drops. Every unit is its own row in Amazon</text>
+        <text x="64" y="450" class="sans" font-size="25" fill="#5c584c">Aurora DSQL — so the count can <tspan fill="#161410" font-weight="700">never</tspan> go below zero.</text>
+
+        <!-- proof bar -->
+        <rect x="64" y="500" width="1072" height="110" rx="12" fill="#161410" />
+
+        <!-- seg dividers -->
+        <line x1="278" y1="520" x2="278" y2="590" stroke="rgba(241,238,228,0.18)" />
+        <line x1="492" y1="520" x2="492" y2="590" stroke="rgba(241,238,228,0.18)" />
+        <line x1="706" y1="520" x2="706" y2="590" stroke="rgba(241,238,228,0.18)" />
+        <line x1="920" y1="520" x2="920" y2="590" stroke="rgba(241,238,228,0.18)" />
+
+        <!-- 1: oversold -->
+        <text x="171" y="565" text-anchor="middle" class="mono" font-size="46" font-weight="800" fill="#34d399">0</text>
+        <text x="171" y="590" text-anchor="middle" class="mono" font-size="12" fill="rgba(241,238,228,0.6)" letter-spacing="0.5">OVERSOLD, EVER</text>
+
+        <!-- 2: buyers -->
+        <text x="385" y="563" text-anchor="middle" class="mono" font-size="38" font-weight="700" fill="#f1eee4">1,000</text>
+        <text x="385" y="590" text-anchor="middle" class="mono" font-size="12" fill="rgba(241,238,228,0.6)" letter-spacing="0.5">CONCURRENT BUYERS</text>
+
+        <!-- 3: conflicts -->
+        <text x="599" y="563" text-anchor="middle" class="mono" font-size="38" font-weight="700" fill="#f1eee4">~0</text>
+        <text x="599" y="590" text-anchor="middle" class="mono" font-size="12" fill="rgba(241,238,228,0.6)" letter-spacing="0.5">OCC CONFLICTS</text>
+
+        <!-- 4: integrity -->
+        <text x="813" y="563" text-anchor="middle" class="mono" font-size="38" font-weight="800" fill="#34d399">✓</text>
+        <text x="813" y="590" text-anchor="middle" class="mono" font-size="12" fill="rgba(241,238,228,0.6)" letter-spacing="0.5">INTEGRITY VERIFIED</text>
+
+        <!-- 5: scale -->
+        <text x="1028" y="556" text-anchor="middle" class="mono" font-size="20" font-weight="700" fill="#7fa0ff">5 REGIONS</text>
+        <text x="1028" y="578" text-anchor="middle" class="mono" font-size="12" fill="rgba(241,238,228,0.6)" letter-spacing="0.5">STRONGLY CONSISTENT</text>
+      </svg>
+    </div>
+  </body>
+</html>
